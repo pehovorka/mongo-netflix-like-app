@@ -1,10 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
+import { FIND_TYPES, useFind } from "../hooks/useFind";
+import DebugInfo from "../components/DebugInfo";
 
-function MoviesList(props) {
-  return <div>Movies List</div>;
+function MoviesList() {
+  const req = { collectionName: "movies", query: {}, type: FIND_TYPES.FIND };
+  const { data: movies, loading, error } = useFind(req);
+
+  if (loading) return "Loading...";
+  if (error) return error.toString();
+
+  return <DebugInfo req={req} res={movies} />;
 }
-
-MoviesList.propTypes = {};
 
 export default MoviesList;
