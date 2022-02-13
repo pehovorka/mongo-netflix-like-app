@@ -1,16 +1,33 @@
 import { useParams, useNavigate } from "react-router-dom";
+
 import DebugInfo from "../components/DebugInfo";
-import { FIND_TYPES, useFind } from "../hooks/useFind";
+import { collections } from "../config/db";
+import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
+
 function MovieDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
   const req = {
-    collectionName: "movies",
-    query: { slug: slug },
-    type: FIND_TYPES.FIND_ONE,
+    collectionName: collections.movies,
+    query: [
+      { $match: { slug: slug } },
+      {
+        $lookup: {
+          from: collections.genres,
+          localField: "genres",
+          foreignField: "_id",
+          as: "genres",
+        },
+      },
+    ],
+    type: QUERY_TYPES.AGGREGATE,
   };
-  const { data: movie, loading, error } = useFind(req);
+  const {
+    data: [movie],
+    loading,
+    error,
+  } = useQuery(req);
 
   if (loading) return "Loading...";
   if (error) return error.toString();

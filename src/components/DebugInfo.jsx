@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
 import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-import { FIND_TYPES } from "../hooks/useFind";
+import { QUERY_TYPES } from "../hooks/useQuery";
 
 function DebugInfo({ req, res }) {
   return (
@@ -11,12 +11,15 @@ function DebugInfo({ req, res }) {
       {req && (
         <div>
           <h3>Query</h3>
-          <SyntaxHighlighter
-            language="javascript"
-            style={monokaiSublime}
-          >{`db.${req.collectionName}.${
-            req?.type === FIND_TYPES.FIND_ONE ? "findOne" : "find"
-          }(${JSON.stringify(req.query)})`}</SyntaxHighlighter>
+          <SyntaxHighlighter language="json" style={monokaiSublime}>{`db.${
+            req.collectionName
+          }.${
+            req?.type === QUERY_TYPES.FIND_ONE
+              ? "findOne"
+              : req?.type === QUERY_TYPES.AGGREGATE
+              ? "aggregate"
+              : "find"
+          }(${JSON.stringify(req.query, null, 2)})`}</SyntaxHighlighter>
         </div>
       )}
       {res && (
@@ -34,7 +37,8 @@ function DebugInfo({ req, res }) {
 DebugInfo.propTypes = {
   req: PropTypes.shape({
     collectionName: PropTypes.string,
-    query: PropTypes.object,
+    query: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    type: PropTypes.oneOf(Object.values(QUERY_TYPES)),
   }),
   res: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };

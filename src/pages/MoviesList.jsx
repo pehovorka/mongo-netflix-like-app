@@ -1,10 +1,16 @@
-import { FIND_TYPES, useFind } from "../hooks/useFind";
-import DebugInfo from "../components/DebugInfo";
 import { Link } from "react-router-dom";
 
+import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
+import { collections } from "../config/db";
+import DebugInfo from "../components/DebugInfo";
+
 function MoviesList() {
-  const req = { collectionName: "movies", query: {}, type: FIND_TYPES.FIND };
-  const { data: movies, loading, error } = useFind(req);
+  const req = {
+    collectionName: collections.movies,
+    query: {},
+    type: QUERY_TYPES.FIND,
+  };
+  const { data: movies, loading, error } = useQuery(req);
 
   if (loading) return "Loading...";
   if (error) return error.toString();

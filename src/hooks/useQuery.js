@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useRealmApp } from "../RealmApp";
 
-export const FIND_TYPES = {
+export const QUERY_TYPES = {
   FIND: "find",
   FIND_ONE: "findOne",
+  AGGREGATE: "aggregate",
 };
 
-export function useFind({ collectionName, query, type }) {
+export function useQuery({ collectionName, query, type }) {
   const app = useRealmApp();
   const [data, setData] = useState([]);
   const [called, setCalled] = useState(false);
@@ -22,8 +23,10 @@ export function useFind({ collectionName, query, type }) {
       setCalled(true);
       try {
         let data;
-        if (type === FIND_TYPES.FIND_ONE) {
+        if (type === QUERY_TYPES.FIND_ONE) {
           data = await collection.findOne(query);
+        } else if (type === QUERY_TYPES.AGGREGATE) {
+          data = await collection.aggregate(query);
         } else {
           data = await collection.find(query);
         }
