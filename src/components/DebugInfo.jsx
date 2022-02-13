@@ -1,3 +1,4 @@
+import Title from "antd/lib/typography/Title";
 import PropTypes from "prop-types";
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
 import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs";
@@ -7,10 +8,10 @@ import { QUERY_TYPES } from "../hooks/useQuery";
 function DebugInfo({ req, res }) {
   return (
     <div>
-      <h2>Debug info</h2>
+      <Title level={2}>Debug info</Title>
       {req && (
         <div>
-          <h3>Query</h3>
+          <Title level={3}>Query</Title>
           <SyntaxHighlighter language="json" style={monokaiSublime}>{`db.${
             req.collectionName
           }.${
@@ -24,7 +25,7 @@ function DebugInfo({ req, res }) {
       )}
       {res && (
         <div>
-          <h3>Response</h3>
+          <Title level={3}>Response</Title>
           <SyntaxHighlighter language="json" style={monokaiSublime}>
             {JSON.stringify(res, null, 3)}
           </SyntaxHighlighter>

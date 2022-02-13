@@ -2,8 +2,7 @@ import { Skeleton } from "antd";
 import Title from "antd/lib/typography/Title";
 import { useParams } from "react-router-dom";
 
-import DebugInfo from "../components/DebugInfo";
-import PageLayout from "../components/PageLayout";
+import { DebugInfo, MovieDetails, PageLayout } from "../components";
 import { collections } from "../config/db";
 import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
 
@@ -35,7 +34,12 @@ function MovieDetail() {
     <PageLayout>
       {loading && <Skeleton active />}
       {error && error.toString()}
-      {movie && <Title>{movie?.name}</Title>}
+      {movie && (
+        <>
+          <Title>{movie?.name}</Title>
+          <MovieDetails movie={movie} />
+        </>
+      )}
       <DebugInfo req={req} res={movie} />
     </PageLayout>
   );

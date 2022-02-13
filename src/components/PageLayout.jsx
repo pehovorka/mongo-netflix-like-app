@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-
 import { Layout } from "antd";
-import AppBar from "./AppBar";
+import { AppBar } from ".";
 const { Header, Content } = Layout;
 
 function PageLayout({ children }) {

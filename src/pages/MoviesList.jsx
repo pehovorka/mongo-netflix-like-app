@@ -4,8 +4,7 @@ import Title from "antd/lib/typography/Title";
 
 import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
 import { collections } from "../config/db";
-import DebugInfo from "../components/DebugInfo";
-import PageLayout from "../components/PageLayout";
+import { DebugInfo, PageLayout } from "../components";
 
 function MoviesList() {
   const req = {
