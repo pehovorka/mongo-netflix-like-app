@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
+import { Skeleton } from "antd";
+import Title from "antd/lib/typography/Title";
 
 import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
 import { collections } from "../config/db";
 import DebugInfo from "../components/DebugInfo";
+import PageLayout from "../components/PageLayout";
 
 function MoviesList() {
   const req = {
@@ -12,12 +15,11 @@ function MoviesList() {
   };
   const { data: movies, loading, error } = useQuery(req);
 
-  if (loading) return "Loading...";
-  if (error) return error.toString();
-
   return (
-    <>
-      <h1>Movies</h1>
+    <PageLayout>
+      <Title>Movies</Title>
+      {loading && <Skeleton active />}
+      {error && error.toString()}
       {movies && (
         <ul>
           {movies.map((movie) => (
@@ -28,7 +30,7 @@ function MoviesList() {
         </ul>
       )}
       <DebugInfo req={req} res={movies} />
-    </>
+    </PageLayout>
   );
 }
 

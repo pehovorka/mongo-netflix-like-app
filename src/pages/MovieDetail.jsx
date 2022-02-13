@@ -1,12 +1,14 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { Skeleton } from "antd";
+import Title from "antd/lib/typography/Title";
+import { useParams } from "react-router-dom";
 
 import DebugInfo from "../components/DebugInfo";
+import PageLayout from "../components/PageLayout";
 import { collections } from "../config/db";
 import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
 
 function MovieDetail() {
   const { slug } = useParams();
-  const navigate = useNavigate();
 
   const req = {
     collectionName: collections.movies,
@@ -29,16 +31,13 @@ function MovieDetail() {
     error,
   } = useQuery(req);
 
-  if (loading) return "Loading...";
-  if (error) return error.toString();
-
   return (
-    <>
-      <button onClick={() => navigate(-1)}>← go back</button>
-
-      <h1>{movie?.name}</h1>
+    <PageLayout>
+      {loading && <Skeleton active />}
+      {error && error.toString()}
+      {movie && <Title>{movie?.name}</Title>}
       <DebugInfo req={req} res={movie} />
-    </>
+    </PageLayout>
   );
 }
 
