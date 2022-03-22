@@ -11,7 +11,7 @@ export function useQuery({ collectionName, query, type }) {
   const app = useRealmApp();
   const [data, setData] = useState([]);
   const [called, setCalled] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState();
   const [error, setError] = useState();
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export function useQuery({ collectionName, query, type }) {
         .db(process.env.REACT_APP_DB_NAME)
         .collection(collectionName);
       setCalled(true);
+      setLoading(true);
       try {
         let data;
         if (type === QUERY_TYPES.FIND_ONE) {
@@ -37,8 +38,8 @@ export function useQuery({ collectionName, query, type }) {
       setLoading(false);
     }
 
-    !called && loading && findData();
+    !called && !loading && findData();
   }, [app.currentUser, data, collectionName, query, loading, called, type]);
 
-  return { data, called, loading, error };
+  return { data, called, loading, error, setCalled };
 }

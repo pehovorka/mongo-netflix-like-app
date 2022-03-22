@@ -2,7 +2,7 @@ import { Skeleton } from "antd";
 import Title from "antd/lib/typography/Title";
 import { useParams } from "react-router-dom";
 
-import { DebugInfo, MovieDetails, PageLayout } from "../components";
+import { DebugInfo, StructuredDetails, PageLayout } from "../components";
 import { collections } from "../config/db";
 import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
 
@@ -11,24 +11,10 @@ function MovieDetail() {
 
   const req = {
     collectionName: collections.movies,
-    query: [
-      { $match: { slug: slug } },
-      {
-        $lookup: {
-          from: collections.genres,
-          localField: "genres",
-          foreignField: "_id",
-          as: "genres",
-        },
-      },
-    ],
-    type: QUERY_TYPES.AGGREGATE,
+    query: { slug: slug },
+    type: QUERY_TYPES.FIND_ONE,
   };
-  const {
-    data: [movie],
-    loading,
-    error,
-  } = useQuery(req);
+  const { data: movie, loading, error } = useQuery(req);
 
   return (
     <PageLayout>
@@ -37,7 +23,7 @@ function MovieDetail() {
       {movie && (
         <>
           <Title>{movie?.name}</Title>
-          <MovieDetails movie={movie} />
+          <StructuredDetails obj={movie} />
         </>
       )}
       <DebugInfo req={req} res={movie} />
