@@ -2,11 +2,11 @@ import Title from "antd/lib/typography/Title";
 import PropTypes from "prop-types";
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/default-highlight";
 import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { BSON } from "realm-web";
 
 import { QUERY_TYPES } from "../hooks/useQuery";
 
 function DebugInfo({ req, res }) {
-  console.log(req.query);
   return (
     <div>
       <Title level={2}>Debug info</Title>
@@ -22,7 +22,7 @@ function DebugInfo({ req, res }) {
               ? "aggregate"
               : "find"
           }(${
-            req.query._id?.constructor?.name === "ObjectId"
+            BSON.ObjectId.isValid(req.query?._id)
               ? `{\n  "_id": ObjectId("${req.query._id.toString()}")\n}`
               : JSON.stringify(req.query, null, 2)
           })`}</SyntaxHighlighter>
