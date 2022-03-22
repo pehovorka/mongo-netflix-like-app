@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Alert, PageHeader, Skeleton } from "antd";
-import Title from "antd/lib/typography/Title";
 import { useParams } from "react-router-dom";
 import { BSON } from "realm-web";
 import PropTypes from "prop-types";

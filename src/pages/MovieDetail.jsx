@@ -1,5 +1,4 @@
 import { PageHeader, Skeleton } from "antd";
-import Title from "antd/lib/typography/Title";
 import { useParams } from "react-router-dom";
 
 import { DebugInfo, StructuredDetails, PageLayout } from "../components";
