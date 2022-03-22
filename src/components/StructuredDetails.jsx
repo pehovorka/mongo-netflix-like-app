@@ -2,16 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Descriptions, Table } from "antd";
 import { Link } from "react-router-dom";
+import { BSON } from "realm-web";
 
 function StructuredDetails({ obj }) {
   const items = Object.keys(obj);
 
   return (
-    <Descriptions title="Entity info" bordered>
+    <Descriptions title="Entity info">
       {items.map((item) => (
         <Descriptions.Item label={item} key={item}>
           {Array.isArray(obj[item]) ? (
             <RenderArray array={obj[item]} label={item} />
+          ) : typeof obj[item] === "object" && obj[item] !== null ? (
+            <RenderObject object={obj[item]} />
           ) : (
             obj[item].toString()
           )}
@@ -37,6 +40,9 @@ function RenderArray({ array, label }) {
           ...item,
           ...(item.slug && {
             slug: <Link to={`/movies/${item.slug}`}>{item.slug}</Link>,
+          }),
+          ...(item.isAvailable && {
+            isAvailable: item.isAvailable ? "true" : "false",
           }),
           ...(label === "cast" || label === "directors" || label === "writers"
             ? {
@@ -72,6 +78,33 @@ function RenderArray({ array, label }) {
       </ul>
     );
   }
+}
+
+function RenderObject({ object }) {
+  if (BSON.ObjectId.isValid(object)) {
+    return object.toString();
+  }
+
+  return (
+    <Table
+      columns={[
+        {
+          title: "key",
+          dataIndex: "key",
+        },
+        {
+          title: "value",
+          dataIndex: "value",
+        },
+      ]}
+      dataSource={Object.keys(object).map((key) => ({
+        key: key,
+        value: object[key].toString(),
+      }))}
+      size="small"
+      pagination={false}
+    />
+  );
 }
 
 export default StructuredDetails;

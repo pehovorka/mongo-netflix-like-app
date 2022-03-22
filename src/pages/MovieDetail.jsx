@@ -1,4 +1,4 @@
-import { Skeleton } from "antd";
+import { PageHeader, Skeleton } from "antd";
 import Title from "antd/lib/typography/Title";
 import { useParams } from "react-router-dom";
 
@@ -21,10 +21,13 @@ function MovieDetail() {
       {loading && <Skeleton active />}
       {error && error.toString()}
       {movie && (
-        <>
-          <Title>{movie?.name}</Title>
+        <PageHeader
+          ghost={false}
+          title={movie?.name}
+          style={{ marginBottom: "2rem" }}
+        >
           <StructuredDetails obj={movie} />
-        </>
+        </PageHeader>
       )}
       <DebugInfo req={req} res={movie} />
     </PageLayout>

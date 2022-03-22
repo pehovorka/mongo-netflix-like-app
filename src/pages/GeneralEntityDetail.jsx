@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Alert, Skeleton } from "antd";
+import { Alert, PageHeader, Skeleton } from "antd";
 import Title from "antd/lib/typography/Title";
 import { useParams } from "react-router-dom";
 import { BSON } from "realm-web";
@@ -42,10 +42,13 @@ function GeneralEntityDetail({ type }) {
         <Alert message="Entered ObjectId is not valid!" type="error" />
       )}
       {entity && (
-        <>
-          <Title>{entity?.name}</Title>
+        <PageHeader
+          ghost={false}
+          title={entity?.name}
+          style={{ marginBottom: "2rem" }}
+        >
           <StructuredDetails obj={entity} />
-        </>
+        </PageHeader>
       )}
       <DebugInfo req={req} res={entity} />
     </PageLayout>
