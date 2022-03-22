@@ -16,7 +16,7 @@ function PageLayout({ children }) {
         the University of Stirling in spring semester 2022. Student number
         2944806.
         <br />
-        This website uses data from Wikipedia, which is released under the{" "}
+        This website uses data from Wikipedia that are released under the{" "}
         <a
           href="https://creativecommons.org/licenses/by-sa/3.0/"
           target="_blank"
