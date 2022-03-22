@@ -6,6 +6,7 @@ import { monokaiSublime } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { QUERY_TYPES } from "../hooks/useQuery";
 
 function DebugInfo({ req, res }) {
+  console.log(req.query);
   return (
     <div>
       <Title level={2}>Debug info</Title>
@@ -20,7 +21,11 @@ function DebugInfo({ req, res }) {
               : req?.type === QUERY_TYPES.AGGREGATE
               ? "aggregate"
               : "find"
-          }(${JSON.stringify(req.query, null, 2)})`}</SyntaxHighlighter>
+          }(${
+            req.query._id?.constructor?.name === "ObjectId"
+              ? `{\n  "_id": ObjectId("${req.query._id.toString()}")\n}`
+              : JSON.stringify(req.query, null, 2)
+          })`}</SyntaxHighlighter>
         </div>
       )}
       {res && (
