@@ -9,10 +9,10 @@ import { QUERY_TYPES } from "../hooks/useQuery";
 function DebugInfo({ req, res }) {
   return (
     <div>
-      <Title level={2}>Debug info</Title>
+      <Title level={3}>Debug info</Title>
       {req && (
         <div>
-          <Title level={3}>Query</Title>
+          <Title level={4}>Query</Title>
           <SyntaxHighlighter language="json" style={monokaiSublime}>{`db.${
             req.collectionName
           }.${
@@ -30,7 +30,7 @@ function DebugInfo({ req, res }) {
       )}
       {res && (
         <div>
-          <Title level={3}>Response</Title>
+          <Title level={4}>Response</Title>
           <SyntaxHighlighter language="json" style={monokaiSublime}>
             {JSON.stringify(res, null, 3)}
           </SyntaxHighlighter>
