@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { Select } from "antd";
-import { QUERY_TYPES } from "../hooks/useQuery";
 const { Option } = Select;
 
 const GENRES = [
@@ -13,13 +12,9 @@ const GENRES = [
   { _id: "actionAndAdventure", name: "Action & Adventure" },
 ];
 
-function GenreSelect({ req, setReq, setCalled }) {
+function GenreSelect({ setGenreQuery }) {
   const handleChange = (value) => {
-    setReq({
-      ...req,
-      ...(value ? { query: { "genres._id": value } } : { query: {} }),
-    });
-    setCalled(false);
+    setGenreQuery(value ? { "genres._id": value } : null);
   };
 
   return (
@@ -38,13 +33,7 @@ function GenreSelect({ req, setReq, setCalled }) {
 }
 
 GenreSelect.propTypes = {
-  setReq: PropTypes.func,
-  req: PropTypes.shape({
-    collectionName: PropTypes.string,
-    query: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    type: PropTypes.oneOf(Object.values(QUERY_TYPES)),
-  }),
-  setCalled: PropTypes.func,
+  setGenreQuery: PropTypes.func.isRequired,
 };
 
 export default GenreSelect;

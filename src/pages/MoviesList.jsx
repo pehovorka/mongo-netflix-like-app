@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { List, PageHeader, Skeleton } from "antd";
+import { Col, List, PageHeader, Row, Skeleton } from "antd";
 import Title from "antd/lib/typography/Title";
 
 import { QUERY_TYPES, useQuery } from "../hooks/useQuery";
 import { collections } from "../config/db";
-import { DebugInfo, PageLayout } from "../components";
-import GenreSelect from "../components/GenreSelect";
+import {
+  DebugInfo,
+  PageLayout,
+  GenreSelect,
+  CountrySelect,
+} from "../components";
 
 function MoviesList() {
   const [req, setReq] = useState({
@@ -15,12 +19,45 @@ function MoviesList() {
     type: QUERY_TYPES.FIND,
   });
   const { data: movies, loading, error, setCalled } = useQuery(req);
+  const [countryQuery, setCountryQuery] = useState(null);
+  const [genreQuery, setGenreQuery] = useState(null);
+
+  useEffect(() => {
+    let queries = [];
+
+    genreQuery && queries.push(genreQuery);
+    countryQuery && queries.push(countryQuery);
+
+    setReq({
+      collectionName: collections.movies,
+      type: QUERY_TYPES.FIND,
+      ...(queries.length === 0
+        ? { query: {} }
+        : queries.length === 1
+        ? { query: queries[0] }
+        : {
+            query: {
+              $and: [...queries],
+            },
+          }),
+    });
+
+    setCalled(false);
+  }, [countryQuery, genreQuery, setCalled]);
 
   return (
     <PageLayout>
       <PageHeader ghost={false} title="Movies" style={{ marginBottom: "2rem" }}>
-        <Title level={5}>Filter genre</Title>
-        <GenreSelect req={req} setReq={setReq} setCalled={setCalled} />
+        <Row gutter={20}>
+          <Col xs={12}>
+            <Title level={5}>Filter genre</Title>
+            <GenreSelect setGenreQuery={setGenreQuery} />
+          </Col>
+          <Col xs={12}>
+            <Title level={5}>Filter country availability</Title>
+            <CountrySelect setCountryQuery={setCountryQuery} />
+          </Col>
+        </Row>
         {loading && <Skeleton active />}
         {error && error.toString()}
         {movies && (
